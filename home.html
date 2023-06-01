@@ -1,0 +1,91 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Dashboard {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- Header -->
+    <div class="header bg-white pb-6">
+      <div class="container-fluid">
+        <div class="header-body">
+          <div class="row py-4">
+            <div class="col-lg-12" style="text-align: right;">
+              <p id="currentDate" class=h3></p>
+              <script>
+                var currentDate = new Date();
+                document.getElementById("currentDate").innerHTML = currentDate.toDateString();
+              </script>              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page content -->
+    <div class="container-fluid mt--6 bg-white">
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="card">
+            <div class="card-header bg-transparent">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h6 class="text-uppercase text-muted ls-1 mb-1">Performance</h6>
+                  <h5 class="h3 mb-0">Total orders</h5>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Purchase price</th>
+                    <th scope="col">Sale price</th>
+                    <th scope="col">Qty</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">Registered</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for product in products %}
+                  <tr>
+                    <td>{{ product.product }}</td>
+                    <td>{{ product.purchase }}</td>
+                    <td>{{ product.sale }}</td>
+                    <td>{{ product.qty }}</td>
+                    <td>{{ product.gender }}</td>
+                    <td>{{ product.created_at | date:'m/d/y (H:i)' }}</td>
+                    <td>
+                      <a href="{% url 'edit_product' product_id=product.id %}" class="btn btn-sm btn-primary">
+                        <i class="fas fa-pen"></i>
+                      </a>
+                      <a href="{% url 'delete_product' product_id=product.id %}" class="btn btn-sm btn-secondary">
+                        <i class="fas fa-trash-alt"></i>
+                      </a>
+                    </td>                    
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      {% include "includes/footer.html" %}
+    </div>
+    
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+
+  <script src="/static/assets/vendor/chart.js/dist/Chart.min.js"></script>
+  <script src="/static/assets/vendor/chart.js/dist/Chart.extension.js"></script>
+
+{% endblock javascripts %}
