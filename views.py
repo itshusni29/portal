@@ -7,7 +7,12 @@ from django.template import loader
 from django.urls import reverse
 from apps.home.models import Product
 from django.shortcuts import render, redirect, get_object_or_404
-
+from django.core.exceptions import ValidationError
+from django.core.files import File
+import mimetypes
+import os
+from django.conf import settings
+from django.core.files.storage import default_storage
 #from employee.forms import EmployeeForm  
 #from employee.models import Employee 
 
@@ -59,27 +64,60 @@ def add_product(request):
         quantity = request.POST.get('qty')
         gender = request.POST.get('gender')
         notes = request.POST.get('notes')
+        pdf_file = request.FILES.get('pdf')
+        
+        if product_name and purchase_price and sale_price and quantity and gender and notes and pdf_file:
+            try:
+                validate_pdf_file(pdf_file)
+            except ValidationError as e:
+                return render(request, 'home/add.html', {'error': e})
+            
+        filename = os.path.join('pdf_files', pdf_file.name)
+        file_path = default_storage.save(os.path.join(settings.MEDIA_ROOT, filename), pdf_file)
 
-        if product_name and purchase_price and sale_price and quantity and gender and notes:
-            product = Product(
-                product=product_name,
-                purchase=purchase_price,
-                sale=sale_price,
-                qty=quantity,
-                gender=gender,
-                notes=notes
-            )
-            product.save()
-            return redirect('home')
+        product = Product(
+            product=product_name,
+            purchase=purchase_price,
+            sale=sale_price,
+            qty=quantity,
+            gender=gender,
+            notes=notes,
+            pdf=file_path
+        )
+        product.save()
+        return redirect('home')
 
     return render(request, 'home/add.html')
 
+def validate_pdf_file(file):
+    if not file.name.endswith('.pdf') or mimetypes.guess_type(file.name)[0] != 'application/pdf':
+        raise ValidationError('Only PDF files are allowed.')
 
 def product(request, product_id):
     product = Product.objects.get(id=product_id)
     if product is not None:
         return render(request, 'home/edit.html', {"object": product})
 
+def edit_product(request, product_id):
+    try:
+        product = Product.objects.get(id=product_id)
+        if request.method == 'POST':
+            product.product = request.POST['product']
+            product.purchase = request.POST['purchase']
+            product.sale = request.POST['sale']
+            product.qty = request.POST['qty']
+            product.gender = request.POST['gender']
+            product.notes = request.POST['notes']
+            product.save()
+            return redirect('home')
+    except Product.DoesNotExist:
+        pass  # or handle the exception as per your application's requirements
+    
+    return render(request, 'home/edit.html', {'product': product})
+
+ 
+    
+'''
 def edit_product(request, product_id):
     product = get_object_or_404(Product, id=product_id)
 
@@ -95,6 +133,7 @@ def edit_product(request, product_id):
 
     context = {'object': product}
     return render(request, 'home/edit.html', context)
+'''
 
 def delete_product(request, product_id):
     try:
