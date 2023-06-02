@@ -1,0 +1,53 @@
+<!--
+              <form action="/add_product" method="POST" enctype="multipart/form-data" autocomplete="off" class="card p-3 border-dark mt-3">
+                  {% csrf_token %}
+          
+                  <div class="input-group mb-3">
+                      <span class="side-label btn border-secondary bg-light"><i class="fas fa-shirt"></i></span>
+                      <input type="text" class="form-control" name="product" maxlength="40" placeholder="Product name" required{% block value-product %}{% endblock value-product %}>
+                  </div>
+          
+                  <div class="input-group mb-3">
+                      <span class="side-label btn border-secondary bg-light"><i class="fas fa-shirt"></i></span>
+                      <input type="text" class="form-control" name="purchase" maxlength="40" placeholder="Purchase or buy" required{% block value-purchase %}{% endblock value-purchase %}>
+                  </div>
+          
+                  <div class="input-group mb-3">
+                      <span class="side-label btn border-secondary bg-light"><i class="fas fa-shirt"></i></span>
+                      <input type="text" class="form-control" name="sale" maxlength="40" placeholder="Price of sell" required{% block value-sale %}{% endblock value-sale %}>
+                  </div>
+          
+                  <div class="input-group mb-3">
+                      <span class="side-label btn border-secondary bg-light"><i class="fas fa-shirt"></i></span>
+                      <input type="text" class="form-control" name="qty" maxlength="40" placeholder="Qty" required{% block value-qty %}{% endblock value-qty %}>
+                  </div>
+          
+                  <div class="input-group mb-3">
+                      <span class="side-label btn border-secondary bg-light"><i class="fas fa-shirt"></i></span>
+                      <select class="form-select" name="gender" required>
+                          {% block option %}
+                          <option value="" hidden>select the gender</option>
+                          {% endblock option %}
+                          <option>M</option>
+                          <option>F</option>
+                          <option>U</option>
+                      </select>
+                  </div>
+          
+                  <div class="form-group">
+                      <textarea class="form-control" name="notes" rows="7" maxlength="1000" placeholder="Description is optional">{% block note %}{% endblock note %}</textarea>
+                  </div>
+          
+                  <div class="mt-4">
+                      <button type="submit" class="btn btn-primary mb-3">
+                          {% block btn-action %}<i class="fas fa-plus"></i> ADD PRODUCT {% endblock btn-action %}
+                      </button>
+                      <a href="{% url 'home' %}" class="btn btn-outline-dark" title="back">
+                          <i class="fas fa-chevron-left"></i>
+                      </a>
+                      <button type="reset" class="btn btn-primary mb-3" title="reset">
+                        <i class="fas fa-sync-alt"></i>
+                      </button>
+                  </div>
+              </form>
+            -->
