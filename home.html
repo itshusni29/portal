@@ -60,17 +60,28 @@
                     <td>{{ product.gender }}</td>
                     <td>{{ product.created_at | date:'m/d/y (H:i)' }}</td>
                     <td>
+                      {% if product.pdf %}
+                      <div class="btn-group">
+                        <a href="{{ product.pdf.url }}" class="btn btn-sm btn-primary" target="_blank" rel="noopener noreferrer">View PDF</a>
+                        <a href="{{ product.pdf.url }}" class="btn btn-sm btn-secondary" download>Download PDF</a>
+                      </div>
+                      {% else %}
+                      N/A
+                      {% endif %}
+                    </td>
+                    <td>
                       <a href="{% url 'edit_product' product_id=product.id %}" class="btn btn-sm btn-primary">
                         <i class="fas fa-pen"></i>
                       </a>
                       <a href="{% url 'delete_product' product_id=product.id %}" class="btn btn-sm btn-secondary">
                         <i class="fas fa-trash-alt"></i>
                       </a>
-                    </td>                    
+                    </td>
                   </tr>
                   {% endfor %}
                 </tbody>
               </table>
+              
             </div>
           </div>
         </div>
