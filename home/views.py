@@ -13,9 +13,11 @@ import mimetypes
 import os
 from django.conf import settings
 from django.core.files.storage import default_storage
+from django.shortcuts import render, redirect
+from .forms import FileForm
+from .models import File
 #from employee.forms import EmployeeForm  
 #from employee.models import Employee 
-
 
 @login_required(login_url="/login/")
 def index(request):
@@ -145,35 +147,25 @@ def delete_product(request, product_id):
 # CRUD 1
 
 
-# CRUD 2
-'''
-def emp(request):  
-    if request.method == "POST":  
-        form = EmployeeForm(request.POST)  
-        if form.is_valid():  
-            try:  
-                form.save()  
-                return redirect('/show')  
-            except:  
-                pass  
-    else:  
-        form = EmployeeForm()  
-    return render(request,'index.html',{'form':form})  
-def show(request):  
-    employees = Employee.objects.all()  
-    return render(request,"show.html",{'employees':employees})  
-def edit(request, id):  
-    employee = Employee.objects.get(id=id)  
-    return render(request,'edit.html', {'employee':employee})  
-def update(request, id):  
-    employee = Employee.objects.get(id=id)  
-    form = EmployeeForm(request.POST, instance = employee)  
-    if form.is_valid():  
-        form.save()  
-        return redirect("/show")  
-    return render(request, 'edit.html', {'employee': employee})  
-def destroy(request, id):  
-    employee = Employee.objects.get(id=id)  
-    employee.delete()  
-    return redirect("/show")'''
-# CRUD 2
+
+
+
+
+def file_list(request):
+    files = File.objects.all()
+    return render(request, 'file_manager/file_list.html', {'files': files})
+
+def upload_file(request):
+    if request.method == 'POST':
+        form = FileForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('file_list')
+    else:
+        form = FileForm()
+    return render(request, 'file_manager/upload_file.html', {'form': form})
+
+def delete_file(request, pk):
+    file = File.objects.get(pk=pk)
+    file.delete()
+    return redirect('file_list')
